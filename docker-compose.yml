@@ -1,0 +1,53 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://flowvault:flowvault@db:5432/flowvault
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: flowvault
+      POSTGRES_PASSWORD: flowvault
+      POSTGRES_DB: flowvault
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U flowvault']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  # ── n8n — Local automation server ──────────────────────────────────────
+  # Start with: docker-compose up n8n
+  # Access at: http://localhost:5678
+  # API key: Go to Settings → API → Create API Key
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - '5678:5678'
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - N8N_API_DISABLED=false
+    volumes:
+      - n8n_data:/home/node/.n8n
+    profiles:
+      - n8n
+
+volumes:
+  postgres_data:
+  n8n_data:

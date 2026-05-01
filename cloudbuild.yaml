@@ -1,0 +1,58 @@
+steps:
+  # 1. Install dependencies
+  - name: 'node:20-alpine'
+    entrypoint: npm
+    args: ['ci', '--prefer-offline']
+
+  # 2. Lint
+  - name: 'node:20-alpine'
+    entrypoint: npm
+    args: ['run', 'lint']
+
+  # 3. TypeScript check
+  - name: 'node:20-alpine'
+    entrypoint: npm
+    args: ['run', 'typecheck']
+
+  # 4. Build
+  - name: 'node:20-alpine'
+    entrypoint: npm
+    args: ['run', 'build']
+
+  # 5. Docker build + tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - -t
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/flowvault:$SHORT_SHA'
+      - -t
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/flowvault:latest'
+      - .
+
+  # 6. Push all tags
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '--all-tags', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/flowvault']
+
+  # 7. Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - flowvault
+      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/flowvault:$SHORT_SHA
+      - --region=$_REGION
+      - --platform=managed
+      - --allow-unauthenticated
+      - --port=8080
+      - --memory=512Mi
+      - --cpu=1
+
+substitutions:
+  _REGION: us-central1
+  _REPO: flowvault-repo
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: '1200s'

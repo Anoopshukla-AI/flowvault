@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ──────────────────────────────────────────────── */
+
+:root {
+  --bg-base: #080B10;
+  --bg-surface: rgba(255,255,255,0.03);
+  --bg-surface-2: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.07);
+  --border-active: rgba(255,255,255,0.12);
+  --text-primary: #ffffff;
+  --text-muted: rgba(255,255,255,0.45);
+  --text-faint: rgba(255,255,255,0.25);
+
+  /* Step type colors */
+  --color-trigger: #00FFA3;
+  --color-fetch: #00C2FF;
+  --color-transform: #A78BFA;
+  --color-decision: #FBBF24;
+  --color-action: #F472B6;
+  --color-output: #34D399;
+
+  /* Glows (35% opacity of step color) */
+  --glow-trigger: rgba(0,255,163,0.35);
+  --glow-fetch: rgba(0,194,255,0.35);
+  --glow-transform: rgba(167,139,250,0.35);
+  --glow-decision: rgba(251,191,36,0.35);
+  --glow-action: rgba(244,114,182,0.35);
+  --glow-output: rgba(52,211,153,0.35);
+
+  /* Standard easing */
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ── Base Resets ────────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar Styling ──────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ── Utility Classes ────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .font-display {
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'DM Mono', monospace;
+  }
+
+  .heading-lg {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .label-mono {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  .glass-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+
+  .glass-card-hover {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition: all 0.3s var(--ease-smooth);
+  }
+
+  .glass-card-hover:hover {
+    background: var(--bg-surface-2);
+    border-color: var(--border-active);
+  }
+}
+
+/* ── Focus Styles ───────────────────────────────────────────────────────── */
+
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 255, 163, 0.5);
+  border-radius: 4px;
+}
+
+/* ── Selection ──────────────────────────────────────────────────────────── */
+
+::selection {
+  background: rgba(0, 255, 163, 0.2);
+  color: #ffffff;
+}
