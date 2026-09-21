@@ -1,6 +1,10 @@
 # FlowVault
-<!-- pr-3 -->
-<!-- pr-4 -->
+
+[![Tech Stack](https://img.shields.io/badge/Tech_Stack-Production_Ready-3776AB?style=flat-square)](https://github.com/Anoopshukla-AI/flowvault)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
+
+
+
 
 **Transform automation workflows into visual, sellable digital products.**
 
